@@ -31,11 +31,13 @@ const create = async (req, res) => {
       });
     }
 
-    const updateData = { ...other, email };
-    await user.create(updateData);
+    const data = { ...other, email };
+    await user.create(data);
 
-    return res.status(200).send({
+    return res.status(200).json({
+      success: true,
       message: "Sucessfully created user.",
+      data: data,
     });
   } catch (error) {
     return res.status(500).send({ message: error.message });
@@ -70,8 +72,10 @@ const update = async (req, res) => {
 
     await user.update(updateData, { where: { id }, individualHooks: true });
 
-    return res.status(200).send({
+    return res.status(200).json({
+      success: true,
       message: "Sucessfully updated user.",
+      data: user,
     });
   } catch (error) {
     return res.status(500).send({ message: error.message });
