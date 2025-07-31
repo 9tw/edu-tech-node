@@ -20,6 +20,63 @@ const index = async (req, res) => {
   }
 };
 
+const create = async (req, res, next) => {
+  try {
+    const { ...other } = req.body;
+
+    const data = await material.create({ ...other });
+
+    return res.status(200).json({
+      success: true,
+      message: "Sucessfully created material.",
+      data: data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const update = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { ...other } = req.body;
+
+    const material = await material.findByPk(id);
+    if (!material) {
+      return res.status(404).send({ message: "material not found." });
+    }
+
+    const updateData = { ...other };
+
+    await material.update(updateData);
+
+    return res.status(200).json({
+      success: true,
+      message: "Sucessfully updated material.",
+      data: material,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const destroy = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await material.destroy({ where: { id } });
+
+    return res.status(200).send({
+      message: "Sucessfully deleted material.",
+    });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
 module.exports = {
   index,
+  create,
+  update,
+  destroy,
 };
