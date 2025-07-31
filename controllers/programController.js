@@ -20,6 +20,63 @@ const index = async (req, res) => {
   }
 };
 
+const create = async (req, res, next) => {
+  try {
+    const { ...other } = req.body;
+
+    const data = await program.create({ ...other });
+
+    return res.status(200).json({
+      success: true,
+      message: "Sucessfully created program.",
+      data: data,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const update = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { ...other } = req.body;
+
+    const program = await program.findByPk(id);
+    if (!program) {
+      return res.status(404).send({ message: "Program not found." });
+    }
+
+    const updateData = { ...other };
+
+    await program.update(updateData);
+
+    return res.status(200).json({
+      success: true,
+      message: "Sucessfully updated program.",
+      data: program,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+const destroy = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    await program.destroy({ where: { id } });
+
+    return res.status(200).send({
+      message: "Sucessfully deleted program.",
+    });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
 module.exports = {
   index,
+  create,
+  update,
+  destroy,
 };
