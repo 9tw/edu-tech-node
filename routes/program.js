@@ -5,9 +5,11 @@ const {
   create,
   update,
   destroy,
+  getByCategory,
 } = require("../controllers/programController");
 
 router.get("/", index);
+router.get("/category/:id", getByCategory);
 router.post("/", create);
 router.put("/:id", update);
 router.delete("/:id", destroy);

@@ -20,6 +20,32 @@ const index = async (req, res) => {
   }
 };
 
+const getByProgram = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const materials = await material.findAll({
+      where: {
+        program_id: id,
+      },
+    });
+
+    if (!materials || materials.length === 0) {
+      return res.status(200).send({
+        message: "Material still empty",
+        result: [],
+      });
+    }
+
+    return res.status(200).send({
+      message: "Sucessfully fetched materials.",
+      result: materials,
+    });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
 const create = async (req, res) => {
   try {
     const { ...other } = req.body;
@@ -79,4 +105,5 @@ module.exports = {
   create,
   update,
   destroy,
+  getByProgram,
 };

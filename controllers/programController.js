@@ -20,6 +20,32 @@ const index = async (req, res) => {
   }
 };
 
+const getByCategory = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const programs = await program.findAll({
+      where: {
+        category_id: id,
+      },
+    });
+
+    if (!programs || programs.length === 0) {
+      return res.status(200).send({
+        message: "Program still empty",
+        result: [],
+      });
+    }
+
+    return res.status(200).send({
+      message: "Sucessfully fetched programs.",
+      result: programs,
+    });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
 const create = async (req, res) => {
   try {
     const { ...other } = req.body;
@@ -79,4 +105,5 @@ module.exports = {
   create,
   update,
   destroy,
+  getByCategory,
 };
