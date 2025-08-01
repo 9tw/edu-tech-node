@@ -20,7 +20,7 @@ const index = async (req, res) => {
   }
 };
 
-const create = async (req, res, next) => {
+const create = async (req, res) => {
   try {
     const { ...other } = req.body;
 
@@ -32,31 +32,31 @@ const create = async (req, res, next) => {
       data: data,
     });
   } catch (error) {
-    next(error);
+    return res.status(500).send({ message: error.message });
   }
 };
 
-const update = async (req, res, next) => {
+const update = async (req, res) => {
   try {
     const { id } = req.params;
     const { ...other } = req.body;
 
-    const category = await category.findByPk(id);
-    if (!category) {
+    const data = await category.findByPk(id);
+    if (!data) {
       return res.status(404).send({ message: "Category not found." });
     }
 
     const updateData = { ...other };
 
-    await category.update(updateData);
+    await data.update(updateData);
 
     return res.status(200).json({
       success: true,
       message: "Sucessfully updated category.",
-      data: category,
+      data: data,
     });
   } catch (error) {
-    next(error);
+    return res.status(500).send({ message: error.message });
   }
 };
 
