@@ -1,8 +1,17 @@
-const { program } = require("../models");
+const { program, category } = require("../models");
 
 const index = async (req, res) => {
   try {
-    const programs = await program.findAll();
+    const programs = await program.findAll({
+      include: [
+        {
+          model: category,
+          as: "category",
+          required: false,
+          attributes: ["id", "title"],
+        },
+      ],
+    });
 
     if (!programs || programs.length === 0) {
       return res.status(200).send({
