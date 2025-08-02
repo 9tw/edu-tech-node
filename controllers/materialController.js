@@ -1,8 +1,17 @@
-const { material } = require("../models");
+const { material, program } = require("../models");
 
 const index = async (req, res) => {
   try {
-    const materials = await material.findAll();
+    const materials = await material.findAll({
+      include: [
+        {
+          model: program,
+          as: "program",
+          required: false,
+          attributes: ["id", "title"],
+        },
+      ],
+    });
 
     if (!materials || materials.length === 0) {
       return res.status(200).send({
