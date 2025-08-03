@@ -29,6 +29,40 @@ const index = async (req, res) => {
   }
 };
 
+const getMaterialById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const materials = await material.findAll({
+      where: {
+        id: id,
+      },
+      include: [
+        {
+          model: program,
+          as: "program",
+          required: false,
+          attributes: ["id", "title"],
+        },
+      ],
+    });
+
+    if (!materials || materials.length === 0) {
+      return res.status(200).send({
+        message: "Material still empty",
+        result: [],
+      });
+    }
+
+    return res.status(200).send({
+      message: "Sucessfully fetched material.",
+      result: materials,
+    });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
 const getByProgram = async (req, res) => {
   try {
     const { id } = req.params;
@@ -115,4 +149,5 @@ module.exports = {
   update,
   destroy,
   getByProgram,
+  getMaterialById,
 };

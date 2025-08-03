@@ -6,9 +6,11 @@ const {
   update,
   destroy,
   getByProgram,
+  getMaterialById,
 } = require("../controllers/materialController");
 
 router.get("/", index);
+router.get("/:id", getMaterialById);
 router.get("/program/:id", getByProgram);
 router.post("/", create);
 router.put("/:id", update);
