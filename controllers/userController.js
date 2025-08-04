@@ -31,7 +31,8 @@ const create = async (req, res) => {
       });
     }
 
-    const data = { ...other, email };
+    const role_id = 1;
+    const data = { ...other, email, role_id };
     await user.create(data);
 
     return res.status(200).json({
