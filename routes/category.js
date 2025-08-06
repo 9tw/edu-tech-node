@@ -6,10 +6,11 @@ const {
   update,
   destroy,
 } = require("../controllers/categoryController");
+const authMiddleware = require("../middleware/authMiddleware");
 
 router.get("/", index);
-router.post("/", create);
-router.put("/:id", update);
-router.delete("/:id", destroy);
+router.post("/", authMiddleware, create);
+router.put("/:id", authMiddleware, update);
+router.delete("/:id", authMiddleware, destroy);
 
 module.exports = router;

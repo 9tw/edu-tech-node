@@ -24,6 +24,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       program_id: DataTypes.INTEGER,
       title: DataTypes.STRING,
+      description: DataTypes.STRING,
+      seq: DataTypes.INTEGER,
       article: DataTypes.STRING,
       created_at: DataTypes.DATE,
       updated_at: DataTypes.DATE,
