@@ -29,6 +29,68 @@ const index = async (req, res) => {
   }
 };
 
+const getMaterialByProgramIdAndSeq = async (req, res) => {
+  try {
+    const { program_id, seq } = req.query;
+
+    const materials = await material.findAll({
+      where: {
+        program_id: program_id,
+        seq: seq,
+      },
+      include: [
+        {
+          model: program,
+          as: "program",
+          required: false,
+          attributes: ["id", "title"],
+        },
+      ],
+    });
+
+    if (!materials || materials.length === 0) {
+      return res.status(200).send({
+        message: "Material still empty",
+        result: [],
+      });
+    }
+
+    return res.status(200).send({
+      message: "Sucessfully fetched material.",
+      result: materials,
+    });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
+const getMaterialLastSeq = async (req, res) => {
+  try {
+    const { program_id } = req.query;
+
+    const materials = await material.findOne({
+      where: {
+        program_id: program_id,
+      },
+      order: [["seq", "DESC"]],
+    });
+
+    if (!materials || materials.length === 0) {
+      return res.status(200).send({
+        message: "Material still empty",
+        result: [],
+      });
+    }
+
+    return res.status(200).send({
+      message: "Sucessfully fetched material.",
+      result: materials,
+    });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
 const getMaterialById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -150,4 +212,6 @@ module.exports = {
   destroy,
   getByProgram,
   getMaterialById,
+  getMaterialByProgramIdAndSeq,
+  getMaterialLastSeq,
 };
