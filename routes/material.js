@@ -7,9 +7,13 @@ const {
   destroy,
   getByProgram,
   getMaterialById,
+  getMaterialByProgramIdAndSeq,
+  getMaterialLastSeq,
 } = require("../controllers/materialController");
 
 router.get("/", index);
+router.get("/seq", getMaterialByProgramIdAndSeq);
+router.get("/last-seq", getMaterialLastSeq);
 router.get("/:id", getMaterialById);
 router.get("/program/:id", getByProgram);
 router.post("/", create);
