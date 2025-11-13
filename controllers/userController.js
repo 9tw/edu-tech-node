@@ -20,6 +20,32 @@ const index = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const users = await user.findOne({
+      where: {
+        id: id,
+      },
+    });
+
+    if (!users || users.length === 0) {
+      return res.status(200).send({
+        message: "No registered users",
+        result: [],
+      });
+    }
+
+    return res.status(200).send({
+      message: "Sucessfully fetched users.",
+      result: users,
+    });
+  } catch (error) {
+    return res.status(500).send({ message: error.message });
+  }
+};
+
 const create = async (req, res) => {
   try {
     const { email, ...other } = req.body;
@@ -102,4 +128,5 @@ module.exports = {
   create,
   update,
   destroy,
+  getUserById,
 };
