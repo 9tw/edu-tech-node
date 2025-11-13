@@ -5,9 +5,11 @@ const {
   create,
   update,
   destroy,
+  getUserById,
 } = require("../controllers/userController");
 
 router.get("/", index);
+router.get("/:id", getUserById);
 router.post("/", create);
 router.put("/:id", update);
 router.delete("/:id", destroy);
