@@ -1,4 +1,5 @@
 const { user } = require("../models");
+const path = require("path");
 
 const index = async (req, res) => {
   try {
@@ -58,7 +59,9 @@ const create = async (req, res) => {
     }
 
     const role_id = 1;
-    const data = { ...other, email, role_id };
+    const photo = "/uploads/default.png";
+
+    const data = { ...other, email, role_id, photo };
     await user.create(data);
 
     return res.status(200).json({
@@ -74,7 +77,7 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { id } = req.params;
-    const { email, password, ...other } = req.body;
+    const { email, ...other } = req.body;
 
     const isEmailTaken = await user.findOne({ where: { email } });
     const findUser = await user.findOne({ where: { id } });
@@ -89,10 +92,23 @@ const update = async (req, res) => {
       });
     }
 
+    let photoPath = null;
     const updateData = { ...other };
-    if (password) {
-      updateData.password = password;
+
+    if (req.files && req.files.photo) {
+      const photo = req.files.photo;
+
+      // give unique filename
+      const fileName = Date.now() + "_" + photo.name;
+      const filePath = path.join(__dirname, "..", "uploads", fileName);
+
+      // move file to uploads/
+      await photo.mv(filePath);
+
+      photoPath = path.join("/uploads", fileName);
+      updateData.photo = photoPath;
     }
+
     if (email) {
       updateData.email = email;
     }

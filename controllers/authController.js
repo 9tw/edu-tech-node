@@ -44,6 +44,7 @@ const login = async (req, res) => {
         id: user_id,
         name: findUser.name,
         role_id: findUser.role_id,
+        photo: findUser.photo,
       },
       token,
     });
